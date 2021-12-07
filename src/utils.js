@@ -1,12 +1,15 @@
 const fileSystem = require('fs')
 
 const createFolder = (folderName) => {
-
     if(!fileSystem.existsSync(folderName)) {
         fileSystem.mkdirSync(folderName)
-        return `Pasta ${folderName} criada com sucesso.`
     }
-    return `Pasta ${folderName} ja existe.`
+}
+const createFile = (path) => {
+    if (fileSystem.existsSync(path)) {
+        return 'arquivo existe'
+    }
+    return 'arquivo NÂO existe'
 }
 const orderData = (nameToChange, data ) =>{
     
@@ -38,5 +41,6 @@ module.exports = {
     createFolder,
     readUsers,
     orderData,
-    getArrayDaysOfMonth
+    getArrayDaysOfMonth,
+    createFile
 }

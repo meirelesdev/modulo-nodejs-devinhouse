@@ -4,7 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const multer = require('multer')
 
-const { createFolder, readUsers, orderData, getArrayDaysOfMonth } = require('./utils')
+const { createFolder, createFile, readUsers, orderData, getArrayDaysOfMonth } = require('./utils')
 
 const app = express()
 const upload = multer()
@@ -29,14 +29,24 @@ app.get('/daysofmonth/:mes', (req, res)=>{
     const { mes } = req.params;
     if(!mes) {
         res.status(404).json({message:'Informe um mes'})
-        return    
+        return
     }
     const daysOfMonth = getArrayDaysOfMonth(mes)
     if(daysOfMonth.length === 0 ) {
         res.status(404).json({message:'Mês informado invalido.'})
-        return    
+        return
     }
     res.status(200).json({message:'sucesso', data: daysOfMonth})
+})
+// [M2S02] Ex 3 - Salvando dados JSON
+app.post('/:name', (req, res)=>{
+    const { name } = req.params
+    createFolder(`src/${name}`)
+    
+    const result = createFile(`src/${name}/data.json`)
+    console.log(result)
+    
+    // res.status(200).json({message: 'Sucesso', data:JSON.stringify(data)})
 })
 
 app.get('/users', (req, res)=>{
