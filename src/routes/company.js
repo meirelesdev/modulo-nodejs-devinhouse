@@ -1,4 +1,4 @@
-const { index, show, createUser, updateUser, deleteUser } = require('../controllers/userController')
+const { index, show, createUser, updateUser, deleteUser } = require('../controllers/companyController')
 const express = require('express')
 const routes = express.Router()
 
