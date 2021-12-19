@@ -28,9 +28,23 @@
         "state": "Santa Catarina"
     },
     {
-        "id": 7,
+        "id": 5,
+        "name": "Sabrina Amaral",
+        "age": 24,
+        "job": "Full-Stack Developer",
+        "state": "Santa Catarina"
+    },
+    {
+        "id": 6,
         "name": "Daniel Meireles",
         "age": 40,
+        "job": "Web Developer",
+        "state": "Santa Catarina"
+    },
+    {
+        "id": 7,
+        "name": "Vitor",
+        "age": 30,
         "job": "Web Developer",
         "state": "Santa Catarina"
     },

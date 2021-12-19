@@ -1,6 +1,7 @@
 const { getUsers, getUserById, createOrUpdateUser, deleteUserById } = require('../services/userService')
 const { isEmpty } = require('../utils/functions')
 
+
 const index = async (req, res) => {
     const users = getUsers()
     return res.status(200).json({ message: "sucesso", data: users })
@@ -52,11 +53,20 @@ const deleteUser = async (req, res) => {
         return res.status(404).json({ message: e.message })
     }
 }
+const importUsers = async (req, res) => {
+    try {
+        console.log(re)
+        
+    } catch (error) {
+        return res.status(404).json({ message: error.message })
+    }    
+}
 
 module.exports = {
     index,
     show,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    importUsers
 }
