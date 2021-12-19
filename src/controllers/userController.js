@@ -55,8 +55,7 @@ const deleteUser = async (req, res) => {
 }
 const importUsers = async (req, res) => {
     try {
-        console.log(re)
-        
+        console.log(req)
     } catch (error) {
         return res.status(404).json({ message: error.message })
     }    
