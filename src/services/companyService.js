@@ -1,34 +1,48 @@
-const { getAll, save, getPosition } = require("../utils/functions")
+const { getAll, save, getPosition } = require("../utils/functions");
+const { getUserById } = require("./userService");
 
-const getCompanies = () => {
-    return getAll('companies');
+const getCompanies = async () => {
+    const companiesData = getAll('companies')
+    const companies = companiesData.map(async (company) => {
+        const employees = company.employees.map(async (employee) => await getUserById(employee.id))
+        const owner = await getUserById(company.owner.id)
+        const employeesResolved = await Promise.all(employees)
+        return { ...company, employees: employeesResolved, owner }
+    })
+    return Promise.all(companies)
 }
-const getCompanyById = (id) => {
-    const companies = getCompanies()
-    return companies.find(company => company.id === id)
+const getCompanyById = async (id) => {
+    const companies = await getCompanies()
+    const company = companies.find(company => company.id === id)
+    const dataEmployees = company.employees.map(async (employee) => await getUserById(employee.id))
+    company.employees = await Promise.all(dataEmployees)
+    company.owner = await getUserById(company.owner.id)
+    return Promise.resolve(company)
 }
-const createOrUpdateCompany = (companyData, id = null) => {
-    const companies = getCompanies()
+
+const createOrUpdateCompany = async (companyData, id = null) => {
+    const companies = await getCompanies()
     let newDataCompanies = []
-    if(id){
+    if (id) {
         newDataCompanies = companies.map(company => {
-            return company.id === id ? {...company, ...companyData } : company
+            return company.id === id ? { ...company, ...companyData } : company
         })
     } else {
-        newDataCompanies = [...companies, {id: companies.length + 1, ...companyData}]
+        newDataCompanies = [...companies, { id: companies.length + 1, ...companyData }]
     }
     save(newDataCompanies, 'companies')
 }
-const deleteCompanyById = (id) => {
-    const companies = getCompanies()
+const deleteCompanyById = async (id) => {
+    const companies = await getCompanies()
     const position = getPosition(companies, id)
-    if(position > -1 ) {
+    if (position > -1) {
         companies.splice(position, 1)
         save(companies, 'companies')
     } else {
         throw new Error('It is not possible to delete this company.')
     }
 }
+
 
 module.exports = {
     getCompanies,

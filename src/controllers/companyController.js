@@ -2,13 +2,12 @@ const { getCompanies, getCompanyById, createOrUpdateCompany, deleteCompanyById }
 const { isEmpty } = require('../utils/functions')
 
 const index = async (req, res) => {
-    const companies = getCompanies()
-    // implementar buscar de funcionarios e owners
+    const companies = await getCompanies()
     return res.status(200).json({ message: "sucesso", data: companies })
 }
 const show = async (req, res) => {
     const { id } = req.params
-    const company = getCompanyById(parseInt(id))
+    const company = await getCompanyById(parseInt(id))
     try {
         if (!company) {
             throw new Error("Company not found.")
