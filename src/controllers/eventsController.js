@@ -1,4 +1,4 @@
-const { createOrUpdateEvent, deleteCompanyById, getEvents, getEventById, getEventByIdOwner } = require('../services/eventsService')
+const { createOrUpdateEvent, deleteEventById, getEvents, getEventById, getEventByIdOwner } = require('../services/eventsService')
 const { isEmpty } = require('../utils/functions')
 
 const index = async (req, res) => {
@@ -48,20 +48,23 @@ const updateEvent = async (req, res) => {
     const data = req.body
     try {
         if (isEmpty(data)) throw new Error('No data to update.')
+        /**
+         * implementar tratamento de convidados, não esta funcionando como deveria.
+         */
         createOrUpdateEvent(data, parseInt(id))
         return res.status(200).json({ message: "Sucesso: Evento atualizado." })
     } catch (e) {
         return res.status(404).json({ message: e.message })
     }
 }
-const deleteCompany = async (req, res) => {
+const deleteEvent = async (req, res) => {
     const { id } = req.params
     try {
         if(!id) {
-            throw new Error('It is not possible to delete this company.')
+            throw new Error('It is not possible to delete this event.')
         }
-        deleteCompanyById(parseInt(id))
-        return res.status(200).json({ message: "Sucesso: empresa deletada." })
+        deleteEventById(parseInt(id))
+        return res.status(200).json({ message: "Sucesso: Event deletado." })
     } catch (e) {
         return res.status(404).json({ message: e.message })
     }
@@ -73,5 +76,5 @@ module.exports = {
     showByOwner,
     createEvent,
     updateEvent,
-    deleteCompany
+    deleteEvent
 }

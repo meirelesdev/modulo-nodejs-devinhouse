@@ -6,9 +6,9 @@ const routes = express.Router()
 routes.get('/', eventsController.index);
 routes.get('/:id', eventsController.show);
 routes.get('/owner/:idOwner', eventsController.showByOwner);
+
 routes.post('/', eventsController.createEvent);
 routes.patch('/:id', eventsController.updateEvent);
-
-// routes.delete('/:id', eventsController.deleteUser);
+routes.delete('/:id', eventsController.deleteEvent);
 
 module.exports = routes

@@ -41,14 +41,14 @@ const createOrUpdateEvent = async (eventData, id = null) => {
     }
     save(newDataEvents, 'events')
 }
-const deleteCompanyById = async (id) => {
-    const companies = await getCompanies()
-    const position = getPosition(companies, id)
+const deleteEventById = async (id) => {
+    const events = await getEvents()
+    const position = getPosition(events, id)
     if (position > -1) {
-        companies.splice(position, 1)
-        save(companies, 'companies')
+        events.splice(position, 1)
+        save(events, 'events')
     } else {
-        throw new Error('It is not possible to delete this company.')
+        throw new Error('It is not possible to delete this Event.')
     }
 }
 
@@ -58,5 +58,5 @@ module.exports = {
     getEventById,
     getEventByIdOwner,
     createOrUpdateEvent,
-    deleteCompanyById
+    deleteEventById
 }
