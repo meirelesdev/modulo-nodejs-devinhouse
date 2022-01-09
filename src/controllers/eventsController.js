@@ -2,7 +2,10 @@ const { createOrUpdateEvent, deleteEventById, getEvents, getEventById, getEventB
 const { isEmpty } = require('../utils/functions')
 
 const index = async (req, res) => {
-    const events = await getEvents()
+    const eventsData = await getEvents()
+    const events = eventsData.map(item=>{
+        return {...item, date: (new Date(item.date)).toLocaleDateString('pt-Br')}
+    })
     return res.status(200).json({ message: "sucesso", data: events })
 }
 const show = async (req, res) => {

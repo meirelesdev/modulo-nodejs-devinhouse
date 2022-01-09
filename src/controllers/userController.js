@@ -8,8 +8,8 @@ const index = async (req, res) => {
 }
 const show = async (req, res) => {
     const { id } = req.params
-    const user = getUserById(parseInt(id))
     try {
+        const user = getUserById(parseInt(id))
         if (!user) {
             throw new Error("User not found.")
         }

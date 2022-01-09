@@ -9,6 +9,7 @@ const getEvents = async () => {
         const guestResolved = await Promise.all(guests)
         return { ...event, guests: guestResolved, owner }
     })
+    
     return Promise.all(events)
 }
 const getEventById = async (id) => {
