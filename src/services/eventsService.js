@@ -36,9 +36,17 @@ const createOrUpdateEvent = async (eventData, id = null) => {
     const events = await getAll('events')
     let newDataEvents = []
     if (id) {
-        newDataEvents = events.map(event => {
-            return event.id === id ? { ...event, ...eventData } : event
-        })
+        const position = getPosition(events, id)
+        if(position === -1) throw new Error("Não é possivel atualizar o evento informado")
+        const eventToUpdate = events[position]
+        if(eventData.guests.length > 0){
+            eventToUpdate.guests = [...eventToUpdate.guests, ...eventData.guests]
+        }
+        if(eventData.owner && eventToUpdate.owner.id !== eventData.owner.id){
+            eventToUpdate.owner = eventData.owner
+        }
+        events[position] = eventToUpdate
+        newDataEvents = [...events]
     } else {
         newDataEvents = [...events, { id: events.length + 1, ...eventData }]
     }

@@ -46,7 +46,7 @@ const createEvent = async (req, res) => {
             throw new Error('No data to save.')
         }
         validateFieldToEvent(data)
-        // await createOrUpdateEvent(data)
+        await createOrUpdateEvent(data)
         return res.status(200).json({ message: "Sucesso: Evento criado." })
     } catch (e) {
         return res.status(404).json({ message: e.message })
@@ -57,9 +57,6 @@ const updateEvent = async (req, res) => {
     const data = req.body
     try {
         if (isEmpty(data)) throw new Error('No data to update.')
-        /**
-         * implementar tratamento de convidados, não esta funcionando como deveria.
-         */
         await createOrUpdateEvent(data, parseInt(id))
         return res.status(200).json({ message: "Sucesso: Evento atualizado." })
     } catch (e) {
