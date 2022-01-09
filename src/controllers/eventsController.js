@@ -4,7 +4,8 @@ const {
     getEvents,
     getEventById,
     getEventByIdOwner,
-    getEventsByDate
+    getEventsByDate,
+    validateFieldToEvent
 } = require('../services/eventsService')
 
 const { isEmpty, formatDate } = require('../utils/functions')
@@ -44,7 +45,8 @@ const createEvent = async (req, res) => {
         if (isEmpty(data)) {
             throw new Error('No data to save.')
         }
-        createOrUpdateEvent(data)
+        validateFieldToEvent(data)
+        // await createOrUpdateEvent(data)
         return res.status(200).json({ message: "Sucesso: Evento criado." })
     } catch (e) {
         return res.status(404).json({ message: e.message })
@@ -58,7 +60,7 @@ const updateEvent = async (req, res) => {
         /**
          * implementar tratamento de convidados, não esta funcionando como deveria.
          */
-        createOrUpdateEvent(data, parseInt(id))
+        await createOrUpdateEvent(data, parseInt(id))
         return res.status(200).json({ message: "Sucesso: Evento atualizado." })
     } catch (e) {
         return res.status(404).json({ message: e.message })
@@ -66,14 +68,11 @@ const updateEvent = async (req, res) => {
 }
 const deleteEvent = async (req, res) => {
     const { id } = req.params
-    try {
-        if (!id) {
-            throw new Error('It is not possible to delete this event.')
-        }
-        deleteEventById(parseInt(id))
-        return res.status(200).json({ message: "Sucesso: Event deletado." })
-    } catch (e) {
-        return res.status(404).json({ message: e.message })
+    try{
+        await deleteEventById(parseInt(id))
+        return res.status(200).json({ message: "Sucesso: Evento deletado." })
+    }catch(e){        
+        return res.status(400).json({ message: e.message })
     }
 }
 const searchEventByDate = async (req, res) => {

@@ -33,7 +33,7 @@ const getEventByIdOwner = async (idOwner) => {
 }
 
 const createOrUpdateEvent = async (eventData, id = null) => {
-    const events = await getEvents()
+    const events = await getAll('events')
     let newDataEvents = []
     if (id) {
         newDataEvents = events.map(event => {
@@ -45,108 +45,121 @@ const createOrUpdateEvent = async (eventData, id = null) => {
     save(newDataEvents, 'events')
 }
 const deleteEventById = async (id) => {
-    const events = await getEvents()
+    const events = await getAll('events')
     const position = getPosition(events, id)
     if (position > -1) {
-        events.splice(position, 1)
+        const now = new Date()
+        if (now.getTime() > (new Date(events[position].date)).getTime()) {
+            throw new Error("Não é possivel deletar um evento que ja aconteceu.")
+        }
+        const del = events.splice(position, 1)
         save(events, 'events')
     } else {
-        throw new Error('It is not possible to delete this Event.')
+        throw new Error("Evento não encontrado")
     }
+
 }
 const getEventsByDate = async (queryObj) => {
     const eventsData = await getEvents()
     let dateFilter = ''
     let events = []
-    if(queryObj.ano && queryObj.mes && queryObj.dia) {
+    if (queryObj.ano && queryObj.mes && queryObj.dia) {
 
         dateFilter = new Date()
         dateFilter.setYear(queryObj.ano)
-        dateFilter.setMonth(queryObj.mes -1)
+        dateFilter.setMonth(queryObj.mes - 1)
         dateFilter.setDate(queryObj.dia)
 
         events = eventsData.filter(item => {
             return formatDate(item.date) === formatDate(dateFilter)
         })
-        return events.map(item=>{
-            return {...item,date: formatDate(item.date)}
+        return events.map(item => {
+            return { ...item, date: formatDate(item.date) }
         })
     }
-    if(queryObj.mes && queryObj.dia) {
-        
+    if (queryObj.mes && queryObj.dia) {
+
         dateFilter = new Date()
-        dateFilter.setMonth(queryObj.mes -1)
+        dateFilter.setMonth(queryObj.mes - 1)
         dateFilter.setDate(queryObj.dia)
 
         events = eventsData.filter(item => {
             const sameDay = (new Date(item.date)).getDate() === dateFilter.getDate()
             const sameMonth = (new Date(item.date)).getMonth() === dateFilter.getMonth()
-            return  sameDay && sameMonth
+            return sameDay && sameMonth
         })
-        return events.map(item=>{
-            return {...item,date: formatDate(item.date)}
+        return events.map(item => {
+            return { ...item, date: formatDate(item.date) }
         })
     }
-    if(queryObj.ano && queryObj.dia) {
+    if (queryObj.ano && queryObj.dia) {
         dateFilter = new Date()
         dateFilter.setYear(queryObj.ano)
         dateFilter.setDate(queryObj.dia)
         events = eventsData.filter(item => {
             const sameDay = (new Date(item.date)).getDate() === dateFilter.getDate()
             const sameYear = (new Date(item.date)).getFullYear() === dateFilter.getFullYear()
-            return  sameDay && sameYear
+            return sameDay && sameYear
         })
-        return events.map(item=>{
-            return {...item,date: formatDate(item.date)}
+        return events.map(item => {
+            return { ...item, date: formatDate(item.date) }
         })
     }
-    if(queryObj.ano && queryObj.mes) {
+    if (queryObj.ano && queryObj.mes) {
         dateFilter = new Date()
-        dateFilter.setMonth(queryObj.mes -1)
+        dateFilter.setMonth(queryObj.mes - 1)
         dateFilter.setYear(queryObj.ano)
 
         events = eventsData.filter(item => {
             const sameMonth = (new Date(item.date)).getMonth() === dateFilter.getMonth()
             const sameYear = (new Date(item.date)).getFullYear() === dateFilter.getFullYear()
-            return  sameMonth && sameYear
+            return sameMonth && sameYear
         })
-        return events.map(item=>{
-            return {...item,date: formatDate(item.date)}
+        return events.map(item => {
+            return { ...item, date: formatDate(item.date) }
         })
     }
-    if(queryObj.dia) {
-        
+    if (queryObj.dia) {
+
         dateFilter = new Date()
         dateFilter.setDate(queryObj.dia)
 
         events = eventsData.filter(item => {
-            return  (new Date(item.date)).getDate() === dateFilter.getDate()
+            return (new Date(item.date)).getDate() === dateFilter.getDate()
         })
-        return events.map(item=>{
-            return {...item,date: formatDate(item.date)}
+        return events.map(item => {
+            return { ...item, date: formatDate(item.date) }
         })
     }
-    if(queryObj.mes) {
-        
+    if (queryObj.mes) {
+
         dateFilter = new Date()
-        dateFilter.setMonth(queryObj.mes -1)
-        
+        dateFilter.setMonth(queryObj.mes - 1)
+
         events = eventsData.filter(item => {
-            return  (new Date(item.date)).getMonth() === dateFilter.getMonth()
+            return (new Date(item.date)).getMonth() === dateFilter.getMonth()
         })
-        return events.map(item=>{
-            return {...item,date: formatDate(item.date)}
+        return events.map(item => {
+            return { ...item, date: formatDate(item.date) }
         })
     }
-    if(queryObj.ano) {
+    if (queryObj.ano) {
         dateFilter = new Date()
         dateFilter.setYear(queryObj.ano)
         events = eventsData.filter(item => {
-            return  (new Date(item.date)).getFullYear() === dateFilter.getFullYear()
+            return (new Date(item.date)).getFullYear() === dateFilter.getFullYear()
         })
-        return events.map(item=>{
-            return {...item,date: formatDate(item.date)}
+        return events.map(item => {
+            return { ...item, date: formatDate(item.date) }
         })
+    }
+}
+const validateFieldToEvent = (data) => {
+    const fields = Object.keys(data)
+    const modelEvent = ["name", "description", "date", "eventPlace", "guests", "owner"]
+    if(modelEvent.length !== fields.length) throw new Error("Formator de dados invalidos.")
+    for (let campo in data) {
+        if (!data[campo] || campo === 'guests' && data[campo].length === 0) throw new Error(`O campo ${campo} não pode ser vazio`)
     }
 }
 
@@ -156,5 +169,6 @@ module.exports = {
     getEventByIdOwner,
     createOrUpdateEvent,
     deleteEventById,
-    getEventsByDate
+    getEventsByDate,
+    validateFieldToEvent
 }
