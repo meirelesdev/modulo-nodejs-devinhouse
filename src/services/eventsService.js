@@ -31,6 +31,19 @@ const getEventByIdOwner = async (idOwner) => {
     })
     return Promise.all(eventsWithDataUsers)
 }
+const getEventByIdGuest = async (idGuest) => {
+    const events = await getEvents()
+    const eventsOfGuest = events.filter(event => {
+        const guestsIds = event.guests.filter(guest => {
+            return guest.id === idGuest
+        })
+        return guestsIds.length > 0
+    })
+    const eventsWithDataUsers = eventsOfGuest.map(async (event) => {
+        return getEventById(event.id)
+    })
+    return Promise.all(eventsWithDataUsers)
+}
 
 const createOrUpdateEvent = async (eventData, id = null) => {
     const events = await getAll('events')
@@ -175,6 +188,7 @@ module.exports = {
     getEvents,
     getEventById,
     getEventByIdOwner,
+    getEventByIdGuest,
     createOrUpdateEvent,
     deleteEventById,
     getEventsByDate,

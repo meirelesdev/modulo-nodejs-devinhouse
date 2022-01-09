@@ -5,7 +5,8 @@ const {
     getEventById,
     getEventByIdOwner,
     getEventsByDate,
-    validateFieldToEvent
+    validateFieldToEvent,
+    getEventByIdGuest
 } = require('../services/eventsService')
 
 const { isEmpty, formatDate } = require('../utils/functions')
@@ -28,9 +29,20 @@ const show = async (req, res) => {
 }
 const showByOwner = async (req, res) => {
     const { idOwner } = req.params
-    console.log(idOwner)
     const event = await getEventByIdOwner(parseInt(idOwner))
     try {
+        if (!event) {
+            throw new Error("Event not found.")
+        }
+        return res.status(200).json({ message: "sucesso", data: event })
+    } catch (e) {
+        return res.status(404).json({ message: e.message })
+    }
+}
+const showByGuest = async (req, res)=>{
+    const { idGuest } = req.params
+    try {
+        const event = await getEventByIdGuest(parseInt(idGuest))
         if (!event) {
             throw new Error("Event not found.")
         }
@@ -91,6 +103,7 @@ module.exports = {
     index,
     show,
     showByOwner,
+    showByGuest,
     createEvent,
     updateEvent,
     deleteEvent,
