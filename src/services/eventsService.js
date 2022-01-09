@@ -1,4 +1,4 @@
-const { getAll, save, getPosition } = require("../utils/functions");
+const { getAll, save, getPosition, formatDate } = require("../utils/functions");
 const { getUserById } = require("./userService");
 
 const getEvents = async () => {
@@ -9,12 +9,14 @@ const getEvents = async () => {
         const guestResolved = await Promise.all(guests)
         return { ...event, guests: guestResolved, owner }
     })
-    
     return Promise.all(events)
 }
 const getEventById = async (id) => {
     const events = await getEvents()
     const event = events.find(event => event.id === id)
+    if (!event) {
+        throw new Error("Evento não encontrado.")
+    }
     const dataGuests = event.guests.map(async (guest) => await getUserById(guest.id))
     event.guests = await Promise.all(dataGuests)
     event.owner = await getUserById(event.owner.id)
@@ -24,7 +26,7 @@ const getEventById = async (id) => {
 const getEventByIdOwner = async (idOwner) => {
     const events = await getEvents()
     const eventsOfOwner = events.filter(event => event.owner.id === idOwner)
-    const eventsWithDataUsers = eventsOfOwner.map( async (event) => {
+    const eventsWithDataUsers = eventsOfOwner.map(async (event) => {
         return getEventById(event.id)
     })
     return Promise.all(eventsWithDataUsers)
@@ -52,12 +54,107 @@ const deleteEventById = async (id) => {
         throw new Error('It is not possible to delete this Event.')
     }
 }
+const getEventsByDate = async (queryObj) => {
+    const eventsData = await getEvents()
+    let dateFilter = ''
+    let events = []
+    if(queryObj.ano && queryObj.mes && queryObj.dia) {
 
+        dateFilter = new Date()
+        dateFilter.setYear(queryObj.ano)
+        dateFilter.setMonth(queryObj.mes -1)
+        dateFilter.setDate(queryObj.dia)
+
+        events = eventsData.filter(item => {
+            return formatDate(item.date) === formatDate(dateFilter)
+        })
+        return events.map(item=>{
+            return {...item,date: formatDate(item.date)}
+        })
+    }
+    if(queryObj.mes && queryObj.dia) {
+        
+        dateFilter = new Date()
+        dateFilter.setMonth(queryObj.mes -1)
+        dateFilter.setDate(queryObj.dia)
+
+        events = eventsData.filter(item => {
+            const sameDay = (new Date(item.date)).getDate() === dateFilter.getDate()
+            const sameMonth = (new Date(item.date)).getMonth() === dateFilter.getMonth()
+            return  sameDay && sameMonth
+        })
+        return events.map(item=>{
+            return {...item,date: formatDate(item.date)}
+        })
+    }
+    if(queryObj.ano && queryObj.dia) {
+        dateFilter = new Date()
+        dateFilter.setYear(queryObj.ano)
+        dateFilter.setDate(queryObj.dia)
+        events = eventsData.filter(item => {
+            const sameDay = (new Date(item.date)).getDate() === dateFilter.getDate()
+            const sameYear = (new Date(item.date)).getFullYear() === dateFilter.getFullYear()
+            return  sameDay && sameYear
+        })
+        return events.map(item=>{
+            return {...item,date: formatDate(item.date)}
+        })
+    }
+    if(queryObj.ano && queryObj.mes) {
+        dateFilter = new Date()
+        dateFilter.setMonth(queryObj.mes -1)
+        dateFilter.setYear(queryObj.ano)
+
+        events = eventsData.filter(item => {
+            const sameMonth = (new Date(item.date)).getMonth() === dateFilter.getMonth()
+            const sameYear = (new Date(item.date)).getFullYear() === dateFilter.getFullYear()
+            return  sameMonth && sameYear
+        })
+        return events.map(item=>{
+            return {...item,date: formatDate(item.date)}
+        })
+    }
+    if(queryObj.dia) {
+        
+        dateFilter = new Date()
+        dateFilter.setDate(queryObj.dia)
+
+        events = eventsData.filter(item => {
+            return  (new Date(item.date)).getDate() === dateFilter.getDate()
+        })
+        return events.map(item=>{
+            return {...item,date: formatDate(item.date)}
+        })
+    }
+    if(queryObj.mes) {
+        
+        dateFilter = new Date()
+        dateFilter.setMonth(queryObj.mes -1)
+        
+        events = eventsData.filter(item => {
+            return  (new Date(item.date)).getMonth() === dateFilter.getMonth()
+        })
+        return events.map(item=>{
+            return {...item,date: formatDate(item.date)}
+        })
+    }
+    if(queryObj.ano) {
+        dateFilter = new Date()
+        dateFilter.setYear(queryObj.ano)
+        events = eventsData.filter(item => {
+            return  (new Date(item.date)).getFullYear() === dateFilter.getFullYear()
+        })
+        return events.map(item=>{
+            return {...item,date: formatDate(item.date)}
+        })
+    }
+}
 
 module.exports = {
     getEvents,
     getEventById,
     getEventByIdOwner,
     createOrUpdateEvent,
-    deleteEventById
+    deleteEventById,
+    getEventsByDate
 }

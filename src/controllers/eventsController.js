@@ -1,27 +1,31 @@
-const { createOrUpdateEvent, deleteEventById, getEvents, getEventById, getEventByIdOwner } = require('../services/eventsService')
-const { isEmpty } = require('../utils/functions')
+const {
+    createOrUpdateEvent,
+    deleteEventById,
+    getEvents,
+    getEventById,
+    getEventByIdOwner,
+    getEventsByDate
+} = require('../services/eventsService')
+
+const { isEmpty, formatDate } = require('../utils/functions')
 
 const index = async (req, res) => {
     const eventsData = await getEvents()
-    const events = eventsData.map(item=>{
-        return {...item, date: (new Date(item.date)).toLocaleDateString('pt-Br')}
+    const events = eventsData.map(item => {
+        return { ...item, date: formatDate(item.date) }
     })
     return res.status(200).json({ message: "sucesso", data: events })
 }
 const show = async (req, res) => {
     const { id } = req.params
-    console.log(id)
-    const event = await getEventById(parseInt(id))
     try {
-        if (!event) {
-            throw new Error("Event not found.")
-        }
-        return res.status(200).json({ message: "sucesso", data: event })
+        const event = await getEventById(parseInt(id))
+        return res.status(200).json({ message: "sucesso", data: { ...event, date: formatDate(event.date) } })
     } catch (e) {
         return res.status(404).json({ message: e.message })
     }
 }
-const showByOwner = async (req, res ) => {
+const showByOwner = async (req, res) => {
     const { idOwner } = req.params
     console.log(idOwner)
     const event = await getEventByIdOwner(parseInt(idOwner))
@@ -63,11 +67,25 @@ const updateEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
     const { id } = req.params
     try {
-        if(!id) {
+        if (!id) {
             throw new Error('It is not possible to delete this event.')
         }
         deleteEventById(parseInt(id))
         return res.status(200).json({ message: "Sucesso: Event deletado." })
+    } catch (e) {
+        return res.status(404).json({ message: e.message })
+    }
+}
+const searchEventByDate = async (req, res) => {
+    const { dia, mes, ano } = req.query
+    try {
+        const query = {
+            ano: Number(ano) || null,
+            mes: Number(mes) || null,
+            dia: Number(dia) || null,
+        }
+        const events = await getEventsByDate(query)
+        return res.status(200).json({ message: "Sucesso.", data: events })
     } catch (e) {
         return res.status(404).json({ message: e.message })
     }
@@ -79,5 +97,6 @@ module.exports = {
     showByOwner,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    searchEventByDate
 }

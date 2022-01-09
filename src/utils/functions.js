@@ -12,9 +12,13 @@ const isEmpty = (obj) => {
 const getPosition = (base, dataToFind ) => {
     return base.findIndex((item) => item.id === dataToFind)
 }
+const formatDate = (dateStr) => {
+    return (new Date(dateStr)).toLocaleDateString('pt-Br')
+}
 module.exports = {
     getAll,
     save,
     isEmpty,
-    getPosition
+    getPosition,
+    formatDate
 }

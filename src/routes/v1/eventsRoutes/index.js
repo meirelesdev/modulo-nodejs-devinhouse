@@ -4,6 +4,8 @@ const express = require('express')
 const routes = express.Router()
 
 routes.get('/', eventsController.index);
+routes.get('/searchevents', eventsController.searchEventByDate);
+
 routes.get('/:id', eventsController.show);
 routes.get('/owner/:idOwner', eventsController.showByOwner);
 
