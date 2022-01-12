@@ -1,17 +1,12 @@
-const express = require('express')
-const { createFolder } = require('./utils')
-
+const express = require('express');
 const app = express()
+const routes = require('./routes')
+const swaggerUI = require('swagger-ui-express')
+const swaggerFile = require('./swagger.json')
+
 app.use(express.json())
+app.use(routes);
 
-app.get('/', (req, res)=>{
-    res.status(200).json({message:'funcioando...'})
-})
-app.post('/', (req, res)=>{
-    const { name } = req.body
-    console.log(name)
-    const msg = createFolder(name)
-    res.status(201).json({message:msg})
-})
+app.use('/api/v1/docs', swaggerUI.serve, swaggerUI.setup(swaggerFile))
 
-app.listen(5000,()=>console.log('rodando...'))
+app.listen(5000, () => console.log('Executando'))
