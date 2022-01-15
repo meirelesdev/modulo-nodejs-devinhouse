@@ -1,4 +1,3 @@
-const fileSystem = require('fs')
 const express = require('express')
 const cors = require('cors')
 const routes = require('./routes/v1/index')

@@ -1,4 +1,5 @@
-const { getUsers, getUserById, createOrUpdateUser, deleteUserById } = require('../services/userService')
+const xlsx = require('xlsx')
+const { getUsers, getUserById, createOrUpdateUser, deleteUserById, createUsersXLSXToObject } = require('../services/userService')
 const { isEmpty } = require('../utils/functions')
 
 
@@ -55,10 +56,16 @@ const deleteUser = async (req, res) => {
 }
 const importUsers = async (req, res) => {
     try {
-        console.log(req)
+        if(!req.file) throw new Error("Sem arquivo para processar")
+        const { Sheets:file } = xlsx.read(req.file.buffer, {type: 'buffer'})
+        const data = createUsersXLSXToObject(file)
+        data.forEach(newUser => {
+            createOrUpdateUser(newUser)
+        })
+        res.status(201).send({ message: 'Usuários importados com sucesso', data: data })
     } catch (error) {
         return res.status(404).json({ message: error.message })
-    }    
+    }
 }
 
 module.exports = {
