@@ -8,3 +8,9 @@ CREATE TABLE restaurante(
     categoria VARCHAR(80)
 );
 SELECT * from restaurante;
+-- [M2S07] Ex 2 - Definição da segunda tabela
+CREATE TABLE prato(
+    titulo VARCHAR(80),
+    descricao VARCHAR(300),
+    preco NUMERIC(5,2)
+);
