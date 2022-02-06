@@ -41,3 +41,8 @@ ALTER TABLE food4dev.restaurante ADD COLUMN endereco_comp VARCHAR(80);
 ALTER TABLE food4dev.restaurante ADD COLUMN endereco_bairro VARCHAR(80);
 ALTER TABLE food4dev.restaurante ADD COLUMN endereco_cidade VARCHAR(80);
 ALTER TABLE food4dev.restaurante ADD COLUMN endereco_estado VARCHAR(80);
+
+-- [M2S07] Ex 5 - Alterando tabelas - Pratos
+ALTER TABLE food4dev.prato add COLUMN categorias VARCHAR(80);
+ALTER TABLE food4dev.prato add COLUMN url_foto TEXT;
+SELECT * from food4dev.prato;
