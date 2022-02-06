@@ -88,3 +88,6 @@ SELECT * from food4dev.restaurante;
 ALTER TABLE food4dev.prato ADD COLUMN id SERIAL PRIMARY KEY;
 SELECT * FROM food4dev.prato;
 
+-- [M2S07] Ex 8 - Relacionando entidades
+ALTER TABLE food4dev.prato ADD COLUMN restaurante_id INT;
+ALTER TABLE food4dev.prato ADD CONSTRAINT restaurante_id FOREIGN KEY (restaurante_id) REFERENCES food4dev.restaurante (id);
