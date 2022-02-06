@@ -34,3 +34,10 @@ VALUES
 ('Macarronada italiana', 'Deliciosa massa italiana acompanha vinho tinto', 35.90),
 ('X-Bacon', 'Delicioso lanche com carne salada e bacon', 25.90);
 SELECT * FROM prato;
+-- [M2S07] Ex 4 - Alterando tabelas - Restaurante
+ALTER TABLE food4dev.restaurante ADD COLUMN endereco_rua VARCHAR(80);
+ALTER TABLE food4dev.restaurante ADD COLUMN endereco_numero INT;
+ALTER TABLE food4dev.restaurante ADD COLUMN endereco_comp VARCHAR(80);
+ALTER TABLE food4dev.restaurante ADD COLUMN endereco_bairro VARCHAR(80);
+ALTER TABLE food4dev.restaurante ADD COLUMN endereco_cidade VARCHAR(80);
+ALTER TABLE food4dev.restaurante ADD COLUMN endereco_estado VARCHAR(80);
