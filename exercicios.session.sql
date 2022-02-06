@@ -46,3 +46,40 @@ ALTER TABLE food4dev.restaurante ADD COLUMN endereco_estado VARCHAR(80);
 ALTER TABLE food4dev.prato add COLUMN categorias VARCHAR(80);
 ALTER TABLE food4dev.prato add COLUMN url_foto TEXT;
 SELECT * from food4dev.prato;
+
+-- [M2S07] Ex 6 - Normalizando a tabela
+ALTER TABLE food4dev.restaurante ADD COLUMN id serial PRIMARY KEY;
+
+UPDATE food4dev.restaurante SET endereco_rua = 'Rua jurandir' WHERE id = 1;
+UPDATE food4dev.restaurante SET endereco_bairro = 'Damaceno' WHERE id = 1;
+UPDATE food4dev.restaurante SET endereco_numero = 50 WHERE id = 1;
+UPDATE food4dev.restaurante SET endereco_cidade = 'Rio de janeiro' WHERE id = 1;
+UPDATE food4dev.restaurante SET endereco_estado = 'Rio de janeiro' WHERE id = 1;
+
+UPDATE food4dev.restaurante SET endereco_rua = 'Rua presidente kennedy' WHERE id = 2;
+UPDATE food4dev.restaurante SET endereco_numero = 446 WHERE id = 2;
+UPDATE food4dev.restaurante SET endereco_bairro = 'Kobrasol' WHERE id = 2;
+UPDATE food4dev.restaurante SET endereco_cidade = 'São jose' WHERE id = 2;
+UPDATE food4dev.restaurante SET endereco_estado = 'Santa catarina' WHERE id = 2;
+
+UPDATE food4dev.restaurante SET endereco_rua = 'Rua das borboletas' WHERE id = 3;
+UPDATE food4dev.restaurante SET endereco_numero = 43 WHERE id = 3;
+UPDATE food4dev.restaurante SET endereco_bairro = 'Centro' WHERE id = 3;
+UPDATE food4dev.restaurante SET endereco_cidade = 'Florianópolis' WHERE id = 3;
+UPDATE food4dev.restaurante SET endereco_estado = 'Santa catarina' WHERE id = 3;
+
+UPDATE food4dev.restaurante SET endereco_rua = 'Av manoel ribas' WHERE id = 4;
+UPDATE food4dev.restaurante SET endereco_numero = 750 WHERE id = 4;
+UPDATE food4dev.restaurante SET endereco_bairro = 'Boa vista' WHERE id = 4;
+UPDATE food4dev.restaurante SET endereco_cidade = 'Curitiba' WHERE id = 4;
+UPDATE food4dev.restaurante SET endereco_estado = 'Parana' WHERE id = 4;
+
+UPDATE food4dev.restaurante SET endereco_rua = 'São luiz' WHERE id = 5;
+UPDATE food4dev.restaurante SET endereco_numero = 50 WHERE id = 5;
+UPDATE food4dev.restaurante SET endereco_bairro = 'Damaceno' WHERE id = 5;
+UPDATE food4dev.restaurante SET endereco_cidade = 'Porto alegre' WHERE id = 5;
+UPDATE food4dev.restaurante SET endereco_estado = 'Rio grande do sul' WHERE id = 5;
+
+ALTER TABLE food4dev.restaurante DROP COLUMN endereco;
+
+SELECT * from food4dev.restaurante;
