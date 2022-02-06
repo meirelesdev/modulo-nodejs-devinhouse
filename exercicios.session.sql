@@ -49,6 +49,8 @@ SELECT * from food4dev.prato;
 
 -- [M2S07] Ex 6 - Normalizando a tabela
 ALTER TABLE food4dev.restaurante ADD COLUMN id serial PRIMARY KEY;
+ALTER TABLE food4dev.restaurante ADD COLUMN url_foto VARCHAR(255) DEFAULT 'https://via.placeholder.com/150 ';
+
 
 UPDATE food4dev.restaurante SET endereco_rua = 'Rua jurandir' WHERE id = 1;
 UPDATE food4dev.restaurante SET endereco_bairro = 'Damaceno' WHERE id = 1;
@@ -62,7 +64,7 @@ UPDATE food4dev.restaurante SET endereco_bairro = 'Kobrasol' WHERE id = 2;
 UPDATE food4dev.restaurante SET endereco_cidade = 'São jose' WHERE id = 2;
 UPDATE food4dev.restaurante SET endereco_estado = 'Santa catarina' WHERE id = 2;
 
-UPDATE food4dev.restaurante SET endereco_rua = 'Rua das borboletas' WHERE id = 3;
+UPDATE food4dev.restaurante SET endereco_rua = 'Rua das borboletas'  WHERE id = 3;
 UPDATE food4dev.restaurante SET endereco_numero = 43 WHERE id = 3;
 UPDATE food4dev.restaurante SET endereco_bairro = 'Centro' WHERE id = 3;
 UPDATE food4dev.restaurante SET endereco_cidade = 'Florianópolis' WHERE id = 3;
@@ -81,5 +83,4 @@ UPDATE food4dev.restaurante SET endereco_cidade = 'Porto alegre' WHERE id = 5;
 UPDATE food4dev.restaurante SET endereco_estado = 'Rio grande do sul' WHERE id = 5;
 
 ALTER TABLE food4dev.restaurante DROP COLUMN endereco;
-
 SELECT * from food4dev.restaurante;
