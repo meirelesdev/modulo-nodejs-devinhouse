@@ -91,3 +91,32 @@ SELECT * FROM food4dev.prato;
 -- [M2S07] Ex 8 - Relacionando entidades
 ALTER TABLE food4dev.prato ADD COLUMN restaurante_id INT;
 ALTER TABLE food4dev.prato ADD CONSTRAINT restaurante_id FOREIGN KEY (restaurante_id) REFERENCES food4dev.restaurante (id);
+-- [M2S07] Ex 9 - Mais relacionamentos
+ALTER TABLE food4dev.categoria RENAME TO food4dev.categorias;
+ALTER TABLE food4dev.prato RENAME TO food4dev.pratos;
+ALTER TABLE food4dev.restaurante RENAME TO food4dev.restaurantes;
+DELETE FROM food4dev.categorias WHERE id >= 6;
+INSERT INTO food4dev.categorias (titulo)(SELECT r.categoria FROM food4dev.restaurantes r)
+ALTER TABLE food4dev.restaurantes RENAME COLUMN food4dev.categoria TO categoria_old;
+ALTER TABLE  food4dev.pratos  RENAME COLUMN food4dev.categoria TO categoria_old ;
+
+ALTER TABLE  food4dev.restaurantes ADD COLUMN  categoria_id INT;
+ALTER TABLE food4dev.restaurantes ADD CONSTRAINT fk_rest_cat FOREIGN KEY (categoria_id) REFERENCES categorias (id) MATCH FULL;
+
+UPDATE 
+    food4dev.restaurantes
+SET categoria_id = c.id 
+FROM categorias c
+WHERE categoria_old = c.titulo;
+ALTER TABLE  food4dev.pratos  ADD COLUMN  categoria_id INT;
+ALTER TABLE food4dev.pratos  ADD CONSTRAINT fk_prato_cat FOREIGN KEY (categoria_id) REFERENCES categorias (id) MATCH FULL;
+ALTER TABLE food4dev.pratos DROP COLUMN categoria_old ;
+ALTER TABLE food4dev.pratos DROP COLUMN url_foto;
+    
+UPDATE pratos p
+SET categoria_id = r.categoria_id 
+FROM restaurantes r 
+WHERE r.id = p.restaurante_id;
+
+
+
