@@ -117,6 +117,27 @@ UPDATE pratos p
 SET categoria_id = r.categoria_id 
 FROM restaurantes r 
 WHERE r.id = p.restaurante_id;
+-- [M2S07] Ex 10 - Queries
+
+-- a) Quantos restaurantes estão cadastrados no sistema?
+SELECT count(*) FROM food4dev.restaurantes r -- 5
+--b) Quantos pratos estão cadastrados no sistema?
+SELECT COUNT(*) FROM food4dev.pratos --15
+--c) Quantos pratos estão vinculados ao restaurante de ID 4?
+SELECT COUNT(*) FROM food4dev.pratos p WHERE p.restaurante_id = 4; -- 3
+-- d) Quantos pratos estão sem vinculação a nenhum restaurante?
+SELECT COUNT(*) FROM food4dev.pratos p WHERE p.restaurante_id ISNULL; -- 4
+-- e) Usando uma query só, quantos pratos e restaurantes estão vinculados à categoria de id 1 ?
+SELECT
+    count(*)
+FROM
+    categorias c
+INNER JOIN restaurantes r ON
+    c.id = r.id
+INNER JOIN pratos p ON
+    p.restaurante_id = c.id
+WHERE
+    c.id = 1; -- 3
 
 
 
