@@ -13,3 +13,4 @@ CREATE TABLE pedidos (
     data_pedido TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     restaurante_id INT NOT NULL REFERENCES restaurantes(id)
 );
+-- [M2S08] Ex 3 - Continuação do Food4Devs
