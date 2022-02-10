@@ -14,3 +14,10 @@ CREATE TABLE pedidos (
     restaurante_id INT NOT NULL REFERENCES restaurantes(id)
 );
 -- [M2S08] Ex 3 - Continuação do Food4Devs
+CREATE TABLE pedido_itens (
+    id SERIAL PRIMARY KEY,
+    prato_id INT NOT NULL REFERENCES pratos(id),
+    pedido_id INT NOT NULL REFERENCES pedidos(id),
+    valor DECIMAL(5,2) NOT NULL CHECK(valor >= 0),
+    quantidade INT NOT NULL CHECK(quantidade > 0)
+);
