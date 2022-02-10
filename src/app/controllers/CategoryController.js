@@ -3,8 +3,8 @@ import Category from "../model/Category"
 export default class CategoryController {
     async index(_, res) {
         try {
-            const posts = await Category.findAll()
-            res.json({ message: 'success', posts })
+            const category = await Category.findAll()
+            res.json({ message: 'success', category })
         } catch (e) {
             res.json({ message: e.message })
         }
@@ -40,11 +40,13 @@ export default class CategoryController {
         }
     }
     async destroy(req, res) {
+        const { id } = req.params
         try {
-            const { id } = req.params
+            const category = await Category.findByPk(id)
+            await category.destroy()
             res.json({ message: 'success', id })
         } catch (e) {
-            res.json({ message: e.message })
+            res.status(400).json({ message: e.message })
         }
     }
 }

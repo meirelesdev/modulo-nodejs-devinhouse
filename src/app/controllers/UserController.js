@@ -1,9 +1,28 @@
 import User from "../model/User"
+import { Op } from 'sequelize'
 
 export default class UserController {
     async index(req, res) {
         try {
-            const users = await User.findAll()
+            const { title } = req.query || ''
+
+            const users = await User.findAll({
+                include: [
+                    {
+                        association: 'posts',
+                        where: {
+                            title: {
+                                [Op.iLike]: `%${title}%`
+                            },
+                            status: true
+                        }
+                    }
+                ],
+                order: [
+                    ["name", "ASC"]
+                ],
+            })
+            
             res.json({ message: 'success', users })
         } catch (e) {
             res.status(400).json({ message: e.message })

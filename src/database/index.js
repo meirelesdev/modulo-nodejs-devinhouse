@@ -3,17 +3,20 @@ import config from '../config/database'
 
 import User from '../app/model/User'
 import Category from '../app/model/Category'
-
-const models = [ User, Category]
+import Post from '../app/model/Post'
 class Database {
     constructor() {
         this.init()
     }
     init() {
-        this.connection = new Sequelize(config)        
-         models
-             .map(model => model.init(this.connection))
-            //  .map(model => model.associate && model.associate(this.connection.model))
+        this.connection = new Sequelize(config)
+        User.init(this.connection)
+        Post.init(this.connection)
+        Category.init(this.connection)
+        
+        User.associate(this.connection.models)
+        Post.associate(this.connection.models)
+        // Category.associate(this.connection.models)
     }
 }
 export default new Database()
