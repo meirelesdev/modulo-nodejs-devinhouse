@@ -10,8 +10,14 @@ class Post extends Model {
             status:  DataTypes.BOOLEAN,
             is_fake_new: DataTypes.BOOLEAN
         }, {
+            scopes: {
+              activesPost: {
+                status: true,
+                is_fake_new: false
+              }
+            },
             sequelize
-        })
+          })
     }
     static associate(models) {
         this.belongsTo(models.User, {
@@ -20,7 +26,7 @@ class Post extends Model {
         })
     }
     static associate(models) {
-        this.hasOne(models.Category, {
+        this.belongsTo(models.Category, {
             foreignKey: 'category_id',
             as: 'category'
         })

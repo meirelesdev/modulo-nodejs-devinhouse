@@ -10,6 +10,7 @@ export default class UserController {
                 include: [
                     {
                         association: 'posts',
+                        required: false, 
                         where: {
                             title: {
                                 [Op.iLike]: `%${title}%`
@@ -18,11 +19,11 @@ export default class UserController {
                         }
                     }
                 ],
+                limit: 10,
                 order: [
                     ["name", "ASC"]
                 ],
             })
-            
             res.json({ message: 'success', users })
         } catch (e) {
             res.status(400).json({ message: e.message })

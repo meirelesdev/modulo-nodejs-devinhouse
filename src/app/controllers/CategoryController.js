@@ -1,5 +1,6 @@
 import Category from "../model/Category"
-
+import schemaCategory from '../../validators/categoryValidator/schema'
+import queryBuilder from '../../services/queryBuilder'
 export default class CategoryController {
     async index(_, res) {
         try {
@@ -12,16 +13,18 @@ export default class CategoryController {
     async show(req, res) {
         const { id } = req.params
         try {
-            const category = await Category.findByPk(id)
-            res.json({ message: 'success', category })
+            // const category = await Category.findByPk(id)
+            
+            const results = await queryBuilder(`SELECT * FROM categories WHERE id = ${id}`);
+            res.json({ message: 'success', results })
         } catch (e) {
             res.json({ message: e.message })
         }
     }
     async store(req, res) {
         try {
-            const { name } = req.body
-            const category = await Category.create({name})
+            if(! await schemaCategory.isValid(req.body)) throw new Error('Nome da categoria é obrigatorio.')
+            const category = await Category.create(req.body)
             res.json({ message: 'success', category })
         } catch (e) {
             res.json({ message: e.message })
@@ -30,9 +33,9 @@ export default class CategoryController {
     async update(req, res) {
         try {
             const { id } = req.params
-            const { name } = req.body
+            if(! await schemaCategory.isValid(req.body)) throw new Error('Nome da categoria é obrigatorio.')
             const category = await Category.findByPk(id)
-            category.name =  name
+            category.name =  req.body.name
             await category.save()
             res.json({ message: 'success', category })
         } catch (e) {
@@ -40,8 +43,8 @@ export default class CategoryController {
         }
     }
     async destroy(req, res) {
-        const { id } = req.params
         try {
+            const { id } = req.params
             const category = await Category.findByPk(id)
             await category.destroy()
             res.json({ message: 'success', id })
