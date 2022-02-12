@@ -21,3 +21,9 @@ CREATE TABLE pedido_itens (
     valor DECIMAL(5,2) NOT NULL CHECK(valor >= 0),
     quantidade INT NOT NULL CHECK(quantidade > 0)
 );
+-- [M2S08] Ex 4 - Continuação do Food4Devs
+CREATE TABLE restaurante_prato (
+    restaurante_id INT NOT NULL REFERENCES restaurantes ON UPDATE CASCADE,
+    prato_id INT NOT NULL REFERENCES pratos(id) ON UPDATE CASCADE,
+    CONSTRAINT rest_prato_pkey PRIMARY KEY (restaurante_id, prato_id)
+);
