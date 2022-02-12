@@ -149,3 +149,28 @@ VALUES
 (3, 4, (select (p.preco * 2) from pratos p WHERE id = 3), 2),
 (3, 6, (select (p.preco * 1) from pratos p WHERE id = 3), 1),
 (15, 5, (select (p.preco * 3) from pratos p WHERE id = 15), 3);
+
+-- [M2S08] Ex 10 - Finalizando o Food4Devs
+-- - a) Uma query que retorne todos os clientes com seus endereços (inner join)
+SELECT * FROM clientes c 
+INNER JOIN endereco e ON c.endereco_id = e.id
+-- - b) Uma query que retorne todos os restaurantes e seus respectivos pratos (inner join pratos_restaurantes e pratos)
+SELECT r.*, p.* FROM restaurantes r 
+inner join restaurante_prato rp on r.id = rp.restaurante_id 
+INNER join pratos p on p.id = rp.prato_id
+-- - c) Uma query que selecione todos os pedidos por cliente, constando o endereço do restaurante e endereço do cliente (inner join pedidos e clientes, restaurantes e endereços).
+SELECT
+    p.numero_pedido,
+    c.id AS codigo_cliente,
+    c.nome,
+    r.nome AS restaurante,
+    e.*
+FROM
+    pedidos p
+INNER JOIN clientes c ON
+    p.cliente_id = c.id
+INNER JOIN restaurantes r ON
+    r.id = p.restaurante_id
+LEFT JOIN endereco e ON
+    c.endereco_id = e.id
+
