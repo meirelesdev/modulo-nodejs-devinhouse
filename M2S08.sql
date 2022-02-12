@@ -131,3 +131,21 @@ VALUES
 ('Carolina', 13),
 ('Margarete', 17),
 ('Geruza', 16);
+
+INSERT INTO pedidos (numero_pedido, valor_entrega, data_pedido, restaurante_id, cliente_id)
+values
+(0001, 5.9, NOW(), 1, 8),
+(0001, 12, NOW(), 2,6),
+(0002, 10.5, NOW(), 2,1),
+(0001, 4.45, NOW(), 3,8),
+(0002, 15, NOW(), 3,4),
+(0001, 6, NOW(), 5,10);
+
+INSERT INTO pedido_itens (prato_id, pedido_id, valor, quantidade)
+VALUES
+(1, 1, (select (p.preco * 1) from pratos p WHERE id = 3), 1),
+(2, 2, (select (p.preco * 1) from pratos p WHERE id = 2), 1),
+(2, 3, (select (p.preco * 1) from pratos p WHERE id = 2), 2),
+(3, 4, (select (p.preco * 2) from pratos p WHERE id = 3), 2),
+(3, 6, (select (p.preco * 1) from pratos p WHERE id = 3), 1),
+(15, 5, (select (p.preco * 3) from pratos p WHERE id = 15), 3);
