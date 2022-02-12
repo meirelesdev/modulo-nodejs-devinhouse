@@ -27,3 +27,20 @@ CREATE TABLE restaurante_prato (
     prato_id INT NOT NULL REFERENCES pratos(id) ON UPDATE CASCADE,
     CONSTRAINT rest_prato_pkey PRIMARY KEY (restaurante_id, prato_id)
 );
+-- [M2S08] Ex 5 - Continuação do Food4Devs
+INSERT
+    INTO
+    restaurante_prato (
+        restaurante_id,
+        prato_id
+    ) (
+        SELECT
+            r.id AS restaurante_id,
+            p.id AS prato_id
+        FROM
+            pratos p
+        INNER JOIN restaurantes r ON
+            r.id = p.restaurante_id
+    );
+-- a coluna categoria da tabela restaurantes ja foi excluida no exercicio 1;
+ALTER TABLE pratos DROP COLUMN restaurante_id ;
