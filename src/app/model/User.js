@@ -1,6 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import bcrypt from 'bcrypt';
-import senderMail from '../../emailSender'
+import { hashPassword, sendEmailWelcom } from "../hooks/userHoos";
 
 class User extends Model {
 
@@ -15,21 +14,8 @@ class User extends Model {
             paranoid: true,
             deletedAt: 'deleted_at',
             hooks: {
-                beforeCreate: async (user) => {
-                    user.password_hash = await bcrypt.hash(user.password_hash, 8)
-                },
-                afterCreate: async (user) => {
-                   await senderMail.sendMail({
-                        from: 'daniel@daniel.com',
-                        to: user.email, 
-                        subject: "Sua conta DevInHouse",
-                        text: "Sua conta criada",
-                        html: `<div>
-                                <h1>DevInHouse</h1>
-                                <p>Bem vindo ${user.name} sua conta foi criada</p>
-                            </div>`,
-                    })
-                }
+                beforeCreate: hashPassword,
+                afterCreate: sendEmailWelcom
             }
         })
     }
