@@ -61,4 +61,26 @@ CREATE TABLE clientes(
 );
 ALTER TABLE pedidos ADD COLUMN cliente_id INT NOT NULL REFERENCES clientes(id);
 
+-- [M2S08] Ex 7 - Continuação do Food4Devs
+ALTER table endereco ADD COLUMN complemento varchar(30);
+ALTER table endereco alter column uf type varchar(50);
+INSERT
+    INTO
+    endereco (
+        rua,
+        numero,
+        bairro,
+        cidade,
+        uf,
+        complemento
+) (SELECT
+    r.endereco_rua,
+    r.endereco_numero,
+    r.endereco_bairro,
+    r.endereco_cidade,
+    r.endereco_estado,
+    r.endereco_comp
+FROM
+    restaurantes r)
+
 
