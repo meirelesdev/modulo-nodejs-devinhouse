@@ -64,6 +64,7 @@ ALTER TABLE pedidos ADD COLUMN cliente_id INT NOT NULL REFERENCES clientes(id);
 -- [M2S08] Ex 7 - Continuação do Food4Devs
 ALTER table endereco ADD COLUMN complemento varchar(30);
 ALTER table endereco alter column uf type varchar(50);
+
 INSERT
     INTO
     endereco (
@@ -84,4 +85,13 @@ FROM
     restaurantes r)
 ALTER table restaurantes add column endereco_id int;
 
+-- [M2S08] Ex 8 - Continuação do Food4Devs
+UPDATE restaurantes
+    SET endereco_id = e.id
+FROM endereco e
+WHERE e.rua = endereco_rua
+AND e.numero = endereco_numero::TEXT
+AND e.bairro = endereco_bairro
+AND e.cidade = endereco_cidade
+AND e.uf = endereco_estado;
 
