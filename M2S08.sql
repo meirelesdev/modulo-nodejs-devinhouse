@@ -82,5 +82,6 @@ INSERT
     r.endereco_comp
 FROM
     restaurantes r)
+ALTER table restaurantes add column endereco_id int;
 
 
