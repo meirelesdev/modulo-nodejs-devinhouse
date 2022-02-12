@@ -44,3 +44,21 @@ INSERT
     );
 -- a coluna categoria da tabela restaurantes ja foi excluida no exercicio 1;
 ALTER TABLE pratos DROP COLUMN restaurante_id ;
+
+-- [M2S08] Ex 6 - Continuação do Food4Devs
+CREATE TABLE endereco(
+    id SERIAL PRIMARY KEY,
+    rua VARCHAR(100) NOT NULL,
+    numero VARCHAR(10) NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    cidade VARCHAR (30) NOT NULL,
+    uf CHAR(2) NOT NULL
+);
+CREATE TABLE clientes(
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    endereco_id INT REFERENCES endereco(id) 
+);
+ALTER TABLE pedidos ADD COLUMN cliente_id INT NOT NULL REFERENCES clientes(id);
+
+
