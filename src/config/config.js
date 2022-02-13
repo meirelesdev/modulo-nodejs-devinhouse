@@ -5,7 +5,6 @@ module.exports = {
     username: 'postgres',
     password:'postgres',
     database: 'exercicios-estagius-fast',
-    schema: 'estagius',
     define : {
         timestamps: true,
         underscored: true,
