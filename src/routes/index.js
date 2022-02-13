@@ -1,9 +1,8 @@
 import express from "express"
 
+import categoriesRoutes from './v1/categoriesRoutes'
 const router = express.Router()
-const teste = (req, res)=>{
-    res.send({message: 'Funcionando'})
-}
-router.get('/', teste)
+
+router.use('/v1', [categoriesRoutes])
 
 export default router
