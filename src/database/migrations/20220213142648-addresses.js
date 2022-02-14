@@ -28,7 +28,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       complement: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       created_at: {
         allowNull: false,

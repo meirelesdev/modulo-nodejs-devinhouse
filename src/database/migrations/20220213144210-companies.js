@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cnpj: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       company_name: {
         type: Sequelize.STRING
