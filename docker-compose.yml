@@ -6,7 +6,7 @@ services:
     volumes:
       - ./data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: devinhouse
+      POSTGRES_DB: devinhouse2
       POSTGRES_PASSWORD: postgres
     ports:
       - 5435:5432
