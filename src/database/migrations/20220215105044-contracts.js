@@ -42,6 +42,10 @@ module.exports = {
       end_validity: {
         type: Sequelize.DATEONLY
       },
+      status: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
+      },
       remuneration: {
         type: Sequelize.FLOAT(11,2)
       },
