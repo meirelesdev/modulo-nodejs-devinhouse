@@ -1,12 +1,12 @@
 import express from "express"
-import TraineeController from "../../app/controllers/TraineeController"
+import ContractController from "../../app/controllers/ContractController"
 
 const contractsRoutes = express.Router()
-const traineeController = new TraineeController()
+const contractController = new ContractController()
 
-contractsRoutes.get('/trainees', traineeController.index)
-contractsRoutes.post('/trainees', traineeController.store)
-contractsRoutes.get('/trainees/:id', traineeController.show)
-contractsRoutes.put('/trainees/:id', traineeController.update)
+contractsRoutes.get('/contracts', contractController.index)
+contractsRoutes.post('/contracts', contractController.store)
+contractsRoutes.get('/contracts/:id', contractController.show)
+contractsRoutes.put('/contracts/:id', contractController.update)
 
 export default contractsRoutes
