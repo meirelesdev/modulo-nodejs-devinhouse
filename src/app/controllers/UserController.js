@@ -1,12 +1,14 @@
 import User from "../model/User"
 import { Op } from 'sequelize'
+import { sign } from "jsonwebtoken"
 
 export default class UserController {
     async index(req, res) {
+        // #swagger.tags = ['Usuário']
         try {
             const { title } = req.query || ''
-
             const users = await User.findAll({
+                attributes: ['name', 'email', 'nickname'],
                 include: [
                     {
                         association: 'posts',
@@ -30,6 +32,7 @@ export default class UserController {
         }
     }
     async show(req, res) {
+        // #swagger.tags = ['Usuário']
         try {
             const { id } = req.params
             const user = await User.findByPk(id)
@@ -39,15 +42,17 @@ export default class UserController {
         }
     }
     async store(req, res) {
-        const { name, nickname, email, password } = req.body
+        // #swagger.tags = ['Usuário']
         try {
+            const { name, nickname, email, password } = req.body
             const user = await User.create({ name, nickname, email, password_hash: password })
-            res.json({ message: 'success', user })
+            res.json({ message: 'success', user: {id: user.id, name:user.name, email: user.email} })
         } catch (e) {
-            res.status(400).json({ message: e.message })
+            res.status(400).json({ message: e.errors[0].message })
         }
     }
     async update(req, res) {
+        // #swagger.tags = ['Usuário']
         try {
             const { id } = req.params
             const { name, nickname, email, password } = req.body
@@ -64,8 +69,9 @@ export default class UserController {
         }
     }
     async destroy(req, res) {
-        const { id } = req.params
+        // #swagger.tags = ['Usuário']
         try {
+            const { id } = req.params
             const user = await User.findByPk(id)
             await user.destroy()
             res.json({ message: 'success', id })
@@ -73,4 +79,53 @@ export default class UserController {
             res.status(400).json({ message: e.message })
         }
     }
+    async session(req, res) {
+        // #swagger.tags = ['Usuário']
+        try {
+            const { email, password } = req.body
+            const user = await User.findOne({
+                attributes: ['name', 'email', 'nickname'],
+                where: {
+                    email: {
+                        [Op.eq] : email
+                    }
+                }
+            })
+            const token = sign({user}, process.env.SECRET, {
+                expiresIn: '5m'
+            })
+
+            res.json({message: 'success', token})
+        } catch (e) {
+            res.status(400).json({ message: e.message || e.errors[0].message })
+        }
+    }
+    async refreshToken(req, res){
+        // #swagger.tags = ['Usuário']
+        try {
+            res.json({message: 'success', message: 'tela de refresh'})
+        } catch (e) {
+            res.status(400).json({ message: e.message || e.errors[0].message })
+        }
+    }
+    async login(req, res){
+        // #swagger.tags = ['Usuário']
+        try {
+            const { email, password } = req.body
+            const user = await User.findOne({
+                attributes: ['name', 'email', 'nickname'],
+                where: {
+                    email: {
+                        [Op.eq] : email
+                    }
+                }
+            })
+            const token = sign({user}, process.env.SECRET, {
+                expiresIn: '5m'
+            })
+            res.json({message: 'success', token})
+        } catch (e) {
+            res.status(400).json({ message: e.message || e.errors[0].message })
+        }
+    }     
 }

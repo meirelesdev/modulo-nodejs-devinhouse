@@ -3,6 +3,7 @@ import schemaCategory from '../../validators/categoryValidator/schema'
 import queryBuilder from '../../services/queryBuilder'
 export default class CategoryController {
     async index(_, res) {
+        // #swagger.tags = ['Categoria']
         try {
             const category = await Category.findAll()
             res.json({ message: 'success', category })
@@ -11,10 +12,10 @@ export default class CategoryController {
         }
     }
     async show(req, res) {
-        const { id } = req.params
+        // #swagger.tags = ['Categoria']
         try {
-            // const category = await Category.findByPk(id)
-            
+            const { id } = req.params
+            // const category = await Category.findByPk(id)            
             const results = await queryBuilder(`SELECT * FROM categories WHERE id = ${id}`);
             res.json({ message: 'success', results })
         } catch (e) {
@@ -22,6 +23,7 @@ export default class CategoryController {
         }
     }
     async store(req, res) {
+        // #swagger.tags = ['Categoria']
         try {
             if(! await schemaCategory.isValid(req.body)) throw new Error('Nome da categoria é obrigatorio.')
             const category = await Category.create(req.body)
@@ -31,6 +33,7 @@ export default class CategoryController {
         }
     }
     async update(req, res) {
+        // #swagger.tags = ['Categoria']
         try {
             const { id } = req.params
             if(! await schemaCategory.isValid(req.body)) throw new Error('Nome da categoria é obrigatorio.')
@@ -43,6 +46,7 @@ export default class CategoryController {
         }
     }
     async destroy(req, res) {
+        // #swagger.tags = ['Categoria']
         try {
             const { id } = req.params
             const category = await Category.findByPk(id)

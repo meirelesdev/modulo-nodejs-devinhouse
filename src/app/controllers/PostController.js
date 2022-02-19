@@ -2,7 +2,7 @@ import Post from "../model/Post"
 import schemaPost from "../../validators/postValidator/schema";
 export default class PostController {
     async index(req, res) {
-
+        // #swagger.tags = ['Post']
         try {
             const { id } = req.params;
 
@@ -16,8 +16,9 @@ export default class PostController {
         }
     }
     async show(req, res) {
-        const { id } = req.params
+        // #swagger.tags = ['Post']
         try {
+            const { id } = req.params
             const post = await Post.findByPk(id)
             res.json({ message: 'success', post })
         } catch (e) {
@@ -25,8 +26,9 @@ export default class PostController {
         }
     }
     async showByUser(req, res) {
-        const { id } = req.params
+        // #swagger.tags = ['Post']
         try {
+            const { id } = req.params
             const post = await Post.addScope('activesPost', null,{override: true}).findAll({
                 where: {
                     user_id: id
@@ -38,6 +40,7 @@ export default class PostController {
         }
     }
     async store(req, res) {
+        // #swagger.tags = ['Post']
         try {
             const { id } = req.params
             const data = {...req.body, user_id: id}
@@ -49,6 +52,7 @@ export default class PostController {
         }
     }
     async update(req, res) {
+        // #swagger.tags = ['Post']
         try {
             const { id } = req.params
             const { title, content, url_cover, status, is_fake_new } = req.body
@@ -67,8 +71,9 @@ export default class PostController {
         }
     }
     async destroy(req, res) {
-        const { id } = req.params
+        // #swagger.tags = ['Post']
         try {
+            const { id } = req.params
             const post = await Post.findByPk(id)
             if(!post) throw new Error("Não foi possivel deletar o post informado.")
             await post.destroy()

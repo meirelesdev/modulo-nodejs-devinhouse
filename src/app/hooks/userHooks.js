@@ -17,5 +17,9 @@ module.exports = {
      },
      hashPassword: async (user) => {
         user.password_hash = await bcrypt.hash(user.password_hash, 8)
+    },
+    validatePassword: async(password, hash) => {
+        console.log(password)
+        console.log(hash)
     }
 }
