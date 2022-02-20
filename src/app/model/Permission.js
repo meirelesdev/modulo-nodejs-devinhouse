@@ -18,7 +18,6 @@ class Permission extends Model {
                     args: true
                 },
             },
-
         },{
             sequelize,
             tableName: 'permissions',
@@ -30,8 +29,8 @@ class Permission extends Model {
     }
     static associate(models){
         this.hasMany(models.PermissionRole,{
-            foreignKey: 'id_permission',
-            as: 'permission'
+            foreignKey: 'permission_id',
+            as: 'RolePermissions'
         })
     }
 }

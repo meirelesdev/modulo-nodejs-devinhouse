@@ -19,14 +19,14 @@ class Post extends Model {
             sequelize
           })
     }
-    static associate(models) {
-        this.belongsTo(models.User, {
+    static associateUser(User) {
+        this.belongsTo(User, {
             foreignKey: 'user_id',
-            as: 'user'
+            as: 'author'
         })
     }
-    static associate(models) {
-        this.belongsTo(models.Category, {
+    static associateCategory(Category) {
+        this.belongsTo(Category, {
             foreignKey: 'category_id',
             as: 'category'
         })

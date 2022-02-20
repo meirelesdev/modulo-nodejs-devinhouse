@@ -60,14 +60,16 @@ class User extends Model {
             }
         );
     }
-    static associate(models) {
-        this.hasMany(models.Post, {
+    static associateRole(UserRole) {
+        this.hasMany(UserRole, {
+            foreignKey: "user_id",
+            as: "roles",
+        });
+    }
+    static associatePosts(Post) {
+        this.hasMany(Post, {
             foreignKey: "user_id",
             as: "posts",
-        });
-        this.hasMany(models.UserRole, {
-            foreignKey: "user_id",
-            as: "user",
         });
     }
 }

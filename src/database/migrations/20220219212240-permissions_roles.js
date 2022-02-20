@@ -2,7 +2,7 @@
 
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable("premissions_roles", {
+        await queryInterface.createTable("permissions_roles", {
             id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
@@ -40,6 +40,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable("premissions_roles");
+        await queryInterface.dropTable("permissions_roles");
     },
 };

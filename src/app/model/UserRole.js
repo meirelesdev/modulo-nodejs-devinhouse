@@ -6,17 +6,17 @@ class UserRole extends Model {
             {},
             {
                 sequelize,
-                tableName: "users_roles",
+                tableName: "user_roles",
             }
         );
     }
     static associate(models) {
         this.belongsTo(models.Role, {
-            foreignKey: "id_role",
+            foreignKey: "role_id",
             as: "role",
         });
         this.belongsTo(models.User, {
-            foreignKey: "id_user",
+            foreignKey: "user_id",
             as: "user",
         });
     }

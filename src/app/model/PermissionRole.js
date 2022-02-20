@@ -12,11 +12,11 @@ class PermissionRole extends Model {
     }
     static associate(models) {
         this.belongsTo(models.Role, {
-            foreignKey: "id_role",
+            foreignKey: "role_id",
             as: "role",
         });
         this.belongsTo(models.Permission, {
-            foreignKey: "id_permission",
+            foreignKey: "permission_id",
             as: "permission",
         });
     }

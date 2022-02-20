@@ -4,14 +4,22 @@ export default class PostController {
     async index(req, res) {
         // #swagger.tags = ['Post']
         try {
-            const { id } = req.params;
-
-            const posts = await Post.findAll()
-
-            return res.json(posts)
+            const posts = await Post.findAll({
+                include:[
+                    {
+                        association: 'category',
+                        required: false
+                    },
+                    {
+                        association: 'author',
+                        required: false
+                    },
+                ]
+            })
+            res.status(200).json({posts})
         } catch (error) {
-            return res.status(400).json(
-                { message: 'Houve um erro ao tentar listar os posts' }
+            res.status(400).json(
+                { message: error.message }
             )
         }
     }
@@ -19,7 +27,14 @@ export default class PostController {
         // #swagger.tags = ['Post']
         try {
             const { id } = req.params
-            const post = await Post.findByPk(id)
+            const post = await Post.findByPk(id, {
+                include: [
+                    {association: 'category'},
+                    {association: 'author'},
+                ]
+            })
+            const category = await post.getCategory()
+            console.log(category)
             res.json({ message: 'success', post })
         } catch (e) {
             res.json({ message: e.message })
@@ -29,7 +44,8 @@ export default class PostController {
         // #swagger.tags = ['Post']
         try {
             const { id } = req.params
-            const post = await Post.addScope('activesPost', null,{override: true}).findAll({
+            console.log(id)
+            const post = await Post.addScope('activesPost', null,{override: true}).find({
                 where: {
                     user_id: id
                 }

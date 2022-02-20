@@ -8,24 +8,16 @@ export default class UserController {
         try {
             const { title } = req.query || ''
             const users = await User.findAll({
-                attributes: ['name', 'email', 'nickname'],
+                attributes: ['id','name', 'email', 'nickname'],
                 include: [
                     {
-                        association: 'posts',
-                        required: false, 
-                        where: {
-                            title: {
-                                [Op.iLike]: `%${title}%`
-                            },
-                            status: true
-                        }
-                    }
-                ],
-                limit: 10,
-                order: [
-                    ["name", "ASC"]
-                ],
-            })
+                        association: 'roles'
+                    },
+                    {
+                        association: 'posts'
+                    },
+                ]
+             })
             res.json({ message: 'success', users })
         } catch (e) {
             res.status(400).json({ message: e.message })
@@ -36,7 +28,7 @@ export default class UserController {
         try {
             const { id } = req.params
             const user = await User.findByPk(id)
-            res.json({ message: 'success', user })
+            res.json({ message: 'success', user})
         } catch (e) {
             res.status(400).json({ message: e.message })
         }
@@ -91,9 +83,7 @@ export default class UserController {
                     }
                 }
             })
-            const token = sign({user}, process.env.SECRET, {
-                expiresIn: '5m'
-            })
+            const token = sign({user}, process.env.SECRET)
 
             res.json({message: 'success', token})
         } catch (e) {
@@ -120,9 +110,11 @@ export default class UserController {
                     }
                 }
             })
-            const token = sign({user}, process.env.SECRET, {
-                expiresIn: '5m'
-            })
+            // Com tempo de expiração
+            // const token = sign({user}, process.env.SECRET, {
+            //     expiresIn: '5m'
+            // })
+            const token = sign({user}, process.env.SECRET)
             res.json({message: 'success', token})
         } catch (e) {
             res.status(400).json({ message: e.message || e.errors[0].message })
