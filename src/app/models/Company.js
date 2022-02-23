@@ -17,6 +17,10 @@ export default class Company extends Model {
             foreignKey: 'address_id',
             as: 'address'
         })
+        this.hasMany(models.Contract, {
+          foreignKey: 'company_id',
+          as: 'contracts'
+      })
     }
     update(data){
       this.cnpj = data.cnpj

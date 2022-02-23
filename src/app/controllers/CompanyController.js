@@ -8,9 +8,8 @@ export default class CompanyController {
         try {
             const companies = await Company.findAll({
                 include: [
-                    {
-                        association: 'address'
-                    }
+                    {association: 'contracts'},
+                    {association: 'address'},
                 ]
             })
             res.status(200).json({message: 'success', companies})
@@ -46,9 +45,8 @@ export default class CompanyController {
             if(!Number(id) ) throw new Error("Identificador inválido.");
             const company = await Company.findByPk(id, {
                 include: [
-                    {
-                        association: 'address'
-                    }
+                    {association: 'contracts'},
+                    {association: 'address'},
                 ]
             })
             if(!company) throw new Error("Empresa não encontrado.");
