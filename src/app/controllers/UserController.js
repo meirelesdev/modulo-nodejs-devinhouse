@@ -11,7 +11,7 @@ export default class UserController {
                 attributes: ['id','name', 'email', 'nickname'],
                 include: [
                     {
-                        association: 'roles'
+                        association: 'cargos'
                     },
                     {
                         association: 'posts'
@@ -27,7 +27,17 @@ export default class UserController {
         // #swagger.tags = ['Usuário']
         try {
             const { id } = req.params
-            const user = await User.findByPk(id)
+            const user = await User.findByPk(id,{
+                attributes: ['id','name', 'email', 'nickname'],
+                include: [
+                    {
+                        association: 'cargos'
+                    },
+                    {
+                        association: 'posts'
+                    },
+                ]
+             })
             res.json({ message: 'success', user})
         } catch (e) {
             res.status(400).json({ message: e.message })

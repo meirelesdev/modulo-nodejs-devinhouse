@@ -10,11 +10,19 @@ export default class RoleController {
                 include: [
                     {
                         association: 'permissions',
-                        required: false
+                        required: false,
+                        attributes: ['id', 'description'],
+                        through: {
+                            attributes: []
+                        }
                     },
                     {
                         association: 'users',
-                        required: false
+                        required: false,
+                        attributes: ['id', 'name', 'email'],
+                        through: {
+                            attributes: []
+                        }
                     }
                 ],
             });
