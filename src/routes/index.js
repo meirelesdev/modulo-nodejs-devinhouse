@@ -10,6 +10,6 @@ router.get('/', (req, res)=>{
     // #swagger.ignore = true
     res.redirect('/api/v1/docs')
 })
-router.use('/api/v1', [usersRoutes, categoriesRoutes, postsRoutes, permissionsRoutes, rolesRoutes] )
+router.use('/api/v1', [usersRoutes, categoriesRoutes, postsRoutes, rolesRoutes, permissionsRoutes] )
 
 export default router

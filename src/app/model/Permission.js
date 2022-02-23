@@ -28,9 +28,10 @@ class Permission extends Model {
         })
     }
     static associate(models){
-        this.hasMany(models.PermissionRole,{
+        this.belongsToMany(models.Role,{
             foreignKey: 'permission_id',
-            as: 'RolePermissions'
+            through: 'permissions_roles',
+            as: 'roles',
         })
     }
 }

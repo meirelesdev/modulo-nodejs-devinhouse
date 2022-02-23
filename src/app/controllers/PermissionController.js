@@ -4,7 +4,7 @@ export default class PermissionController {
     async index(_, res) {
         // #swagger.tags = ['Permissões']
         try {
-            const category = await Permission.findAll();
+            const category = await Permission.findAll({attributes: ['id', 'description']});
             res.json({ message: "success", category });
         } catch (e) {
             res.json({ message: e.message });
@@ -14,7 +14,7 @@ export default class PermissionController {
         // #swagger.tags = ['Permissões']
         try {
             const { id } = req.params;
-            const permission = await Permission.findByPk(id)            
+            const permission = await Permission.findByPk(id, {attributes: ['id', 'description']})
             res.json({ message: "success", permission });
         } catch (e) {
             res.json({ message: e.message });
@@ -23,6 +23,8 @@ export default class PermissionController {
     async store(req, res) {
         // #swagger.tags = ['Permissões']
         try {
+            const {description } = req.body
+            if(!description) throw new Error("Dados inválidos.")
             const permission = await Permission.create(req.body);
             res.json({ message: "success", permission });
         } catch (e) {
@@ -45,9 +47,9 @@ export default class PermissionController {
         // #swagger.tags = ['Permissões']
         try {
             const { id } = req.params;
-            const category = await Category.findByPk(id);
-            await category.destroy();
-            res.json({ message: "success", id });
+            const permission = await Permission.findByPk(id);
+            await permission.destroy();
+            res.status(201).json();
         } catch (e) {
             res.status(400).json({ message: e.message });
         }

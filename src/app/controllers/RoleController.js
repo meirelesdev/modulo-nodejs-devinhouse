@@ -1,11 +1,12 @@
+import Permission from "../model/Permission";
 import Role from "../model/Role";
-import PermissionRole from '../model/PermissionRole'
 
 export default class RoleController {
     async index(_, res) {
         // #swagger.tags = ['Cargo']
         try {
             const role = await Role.findAll({
+                attributes: ['id', 'description'],
                 include: [
                     {
                         association: 'permissions',
@@ -26,7 +27,16 @@ export default class RoleController {
         // #swagger.tags = ['Cargo']
         try {
             const { id } = req.params;
-            const role = await Role.findByPk(id)            
+            const role = await Role.findByPk(id, {
+                attributes: ['id', 'description'],
+                include: {
+                    association: 'permissions',
+                    attributes: ['id', 'description'],
+                    through: {
+                        attributes: []
+                    }
+                }
+            })
             res.json({ message: "success", role });
         } catch (e) {
             res.json({ message: e.message });
@@ -36,15 +46,7 @@ export default class RoleController {
         // #swagger.tags = ['Cargo']
         try {
             const { description, permissions } = req.body
-            const role = await Role.create({description});
-            if(permissions && permissions.length > 0) {
-                const permissionsRole = permissions.map( async permission => {
-                    return await PermissionRole.create({
-                        'role_id': role.id,
-                        'permission_id': permission
-                    })
-                })
-            }
+            
             res.json({ message: "success", role });
         } catch (e) {
             res.json({ message: e.message });
@@ -53,23 +55,28 @@ export default class RoleController {
     async update(req, res) {
         // #swagger.tags = ['Cargo']
         try {
-            const { id } = req.params;
+            const { id } = req.params
+            if(!id) throw new Error("Identificador invalido.");
+
             const { description, permissions } = req.body
+            const role = await Role.findByPk(id)
+            if(!role) throw new Error("Cargo não encontrado")
+
             if(permissions && permissions.length > 0) {
-                const permissionsRole = permissions.map( async permission => {
-                    return await PermissionRole.create({
-                        'role_id': id,
-                        'permission_id': permission
-                    })
+                const permissionsEntity = await Permission.findAll({
+                    where: {
+                        id: permissions
+                    }
                 })
+                permissionsEntity.forEach(async(permission) => {
+                    await role.addPermission(permission)
+                });
             }
-            const role = await Role.findByPk(id);
-            role.description = description || role.description;
-            await role.save();
             res.json({ message: "success", role });
         } catch (e) {
             res.json({ message: e.message });
         }
+
     }
     async destroy(req, res) {
         // #swagger.tags = ['Cargo']

@@ -24,12 +24,14 @@ class Role extends Model {
         })
     }
     static associate(models){
-        this.hasMany(models.PermissionRole, {
-            foreignKey: 'permission_id',
+        this.belongsToMany(models.Permission, {
+            foreignKey: 'role_id',
+            through: 'permissions_roles',
             as: 'permissions'
         })
-        this.hasMany(models.UserRole, {
-            foreignKey: 'user_id'  ,
+        this.belongsToMany(models.User, {
+            foreignKey: 'user_id',
+            through: 'user_roles',
             as: 'users'
         })
     }

@@ -1,35 +1,35 @@
 import { Model, DataTypes } from "sequelize";
 
 class Post extends Model {
-
     static init(sequelize) {
-        super.init({
-            title: DataTypes.STRING,
-            content: DataTypes.TEXT,
-            url_cover: DataTypes.STRING,
-            status:  DataTypes.BOOLEAN,
-            is_fake_new: DataTypes.BOOLEAN
-        }, {
-            scopes: {
-              activesPost: {
-                status: true,
-                is_fake_new: false
-              }
+        super.init(
+            {
+                title: DataTypes.STRING,
+                content: DataTypes.TEXT,
+                url_cover: DataTypes.STRING,
+                status: DataTypes.BOOLEAN,
+                is_fake_new: DataTypes.BOOLEAN,
             },
-            sequelize
-          })
+            {
+                scopes: {
+                    activesPost: {
+                        status: true,
+                        is_fake_new: false,
+                    },
+                },
+                sequelize,
+            }
+        );
     }
-    static associateUser(User) {
-        this.belongsTo(User, {
-            foreignKey: 'user_id',
-            as: 'author'
-        })
-    }
-    static associateCategory(Category) {
-        this.belongsTo(Category, {
-            foreignKey: 'category_id',
-            as: 'category'
-        })
+    static associate(models) {
+        this.belongsTo(models.Category, {
+            foreignKey: "category_id",
+            as: "category",
+        });
+        this.belongsTo(models.User, {
+            foreignKey: "user_id",
+            as: "author",
+        });
     }
 }
-export default Post
+export default Post;

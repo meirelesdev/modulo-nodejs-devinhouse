@@ -6,8 +6,15 @@ class Category extends Model {
         super.init({
             name: DataTypes.STRING,
         }, {
-            sequelize
+            sequelize,
+            tableName: 'categories'
         })
+    }
+    static associate(models) {
+        this.hasMany(models.Post, { 
+            foreignKey: 'category_id',
+            as: 'posts' 
+        });
     }
 }
 export default Category

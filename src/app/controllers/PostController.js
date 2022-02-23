@@ -44,7 +44,6 @@ export default class PostController {
         // #swagger.tags = ['Post']
         try {
             const { id } = req.params
-            console.log(id)
             const post = await Post.addScope('activesPost', null,{override: true}).find({
                 where: {
                     user_id: id
