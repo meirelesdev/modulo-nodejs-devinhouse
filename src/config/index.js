@@ -3,7 +3,7 @@ require('dotenv/config');
 const { parse } = require('pg-connection-string');
 
 const config = parse(process.env.DATABASE_URL);
-console.log(config)
+
 module.exports = {
   dialect: 'postgres',
   host: config.host,
