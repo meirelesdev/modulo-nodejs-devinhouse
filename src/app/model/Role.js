@@ -30,7 +30,7 @@ class Role extends Model {
             as: 'permissions'
         })
         this.belongsToMany(models.User, {
-            foreignKey: 'user_id',
+            foreignKey: 'role_id',
             through: 'user_roles',
             as: 'users'
         })
