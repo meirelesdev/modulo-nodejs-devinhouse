@@ -1,9 +1,8 @@
-const User = require('../app/models/User')
 const routes = require('express').Router()
+const addressesRoutes = require('./v1/addressRoutes')
+const restaurantsRoutes = require('./v1/restaurantsRoutes')
+const categoryRoutes = require('./v1/categoriesRoutes')
 
-routes.get('/', async(req, res)=>{
-    const users = await User.findAll();
-    res.json({message: 'tudo ok', users})
-})
+routes.use('/api/v1',[ addressesRoutes, restaurantsRoutes, categoryRoutes])
 
 module.exports = routes

@@ -4,8 +4,14 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('restaurants', { 
       id: Sequelize.INTEGER,
-      name: Sequelize.STRING,
-      phone: Sequelize.STRING,
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       address_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -25,6 +31,14 @@ module.exports = {
         onDelete: 'CASCADE',
         allowNull: false
       },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false
+      }
     });
   },
 
