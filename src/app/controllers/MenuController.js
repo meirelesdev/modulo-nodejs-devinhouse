@@ -43,13 +43,15 @@ class MenuController {
     async update(req, res) {
         try {
             const { id } = req.params;
-            const { description } = req.body
+            const { title, description, price } = req.body
             const menu = await Menu.findByPk(id)
-            if(!category) {
-                return res.json({ message: `Categoria não encontrado`});    
+            if(!menu) {
+                return res.json({ message: `Prato não encontrado`});    
             }
-            category.description = description || category.description
-            res.json({ message: "success", category });
+            menu.title = title || menu.title
+            menu.description = description || menu.description
+            menu.price = price || menu.price
+            res.json({ message: "success", menu });
         } catch (e) {
             res.status(400).json({ message: "error", e });
         }
@@ -58,10 +60,10 @@ class MenuController {
         try {
             const { id } = req.params;
             const menu = await Menu.findByPk(id)
-            if(!category) {
-                return res.json({ message: `Categoria não encontrado`});    
+            if(!menu) {
+                return res.json({ message: `Prato não encontrado`});    
             }
-            await Menu.destroy()
+            await menu.destroy()
             res.status(200).json();
         } catch (e) {
             res.status(400).json({ message: "error", e });

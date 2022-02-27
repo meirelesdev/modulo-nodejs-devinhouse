@@ -1,20 +1,32 @@
 const Order = require("../models/Order");
+const OrderItem = require("../models/OrderItem");
 const Restaurant = require("../models/Restaurant");
 const User = require("../models/User");
+const Menu = require("../models/Menu");
 
 class OrderController {
     async index(req, res) {
         try {
             const { restaurant_id } = req.params
             const orders = await Order.findAll({
-                attributes:['order_number', 'order_date', 'delivery_value'],
+                attributes:['id','order_number', 'order_date', 'delivery_value'],
                 where: {
                     restaurant_id
                 },
                 include: [
                     {
+                        association: 'restaurant',
+                        attributes:['id', 'name', 'phone'],
+                    },
+                    {
                         association: 'client',
                         attributes:['name', 'nickname', 'email'],
+                    },
+                    {
+                        association: 'items',
+                        through: {
+                            attributes: ['amount', 'value'],
+                        }
                     }
                 ]
             });
@@ -28,7 +40,7 @@ class OrderController {
         try {
             const { order_number } = req.params
             const order = await Order.findAll({
-                attributes:['order_number', 'order_date', 'delivery_value'],
+                attributes:['id','order_number', 'order_date', 'delivery_value'],
                 where: {
                     order_number
                 },
@@ -102,6 +114,59 @@ class OrderController {
             res.status(200).json();
         } catch (e) {
             res.status(400).json({error: e});
+        }
+    }
+    async add(req, res) {
+        try {
+            const {order_id} = req.params
+            const { menu_id, amount } = req.body
+            const order = await Order.findByPk(order_id)
+            if(!order){
+                res.status(404).json({message: 'Pedido não encontrado.', })    
+            }
+            const item = await Menu.findByPk(menu_id)
+            if(!item) {
+                res.status(404).json({message: 'Item não encontrado'})
+            }
+            const value = Number(amount) * item.price
+            const orderItem = await OrderItem.create({menu_id: item.id, order_id: order.id, amount: Number(amount), value })
+            res.status(200).json({message: 'success', orderItem})
+        } catch (e) {
+            res.status(400).json({e})
+        }
+    }
+    async updateItem(req, res) {
+        try {
+            const {item_id} = req.params
+            const { amount } = req.body
+            const orderItem = await OrderItem.findByPk(item_id)
+            if(!orderItem) {
+                res.status(404).json({message: 'Item não encontrado'})
+            }
+            const item = await Menu.findByPk(orderItem.menu_id)
+            if(!item) {
+                res.status(404).json({message: 'Item não encontrado'})
+            }
+            orderItem.value = Number(amount) * item.price
+            orderItem.amount = amount
+            await orderItem.save()
+            res.status(200).json({message: 'success', orderItem})
+        } catch (e) {
+            res.status(400).json({e})
+        }
+    }
+    async remove(req, res){
+        try {
+            const {item_id } = req.params
+            const orderItem = await OrderItem.findByPk(item_id)
+            if(!orderItem){
+                res.status(404).json({message: 'Item não encontrado.', })    
+            }
+            await orderItem.destroy()
+            res.status(200).json()
+        } catch (e) {
+            console.log(e)
+            res.status(400).json({e})
         }
     }
 }

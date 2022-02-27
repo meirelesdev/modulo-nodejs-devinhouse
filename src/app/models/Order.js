@@ -39,6 +39,11 @@ class Order extends Model {
             key: "id",
             as: 'client'
         });
+        this.belongsToMany(models.Menu, {
+            foreignKey: 'order_id',
+            through: 'order_items',
+            as: 'items',
+        })
     }
 }
 
