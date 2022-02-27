@@ -4,7 +4,10 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable("menus", { 
           id: {
-            type: Sequelize.INTEGER
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true
           },
           title: {
             type: Sequelize.STRING(150),
@@ -15,7 +18,25 @@ module.exports = {
             allowNull: false
           },
           price: {
-            type: Sequelize.INTEGER(6,2),
+            type: Sequelize.FLOAT,
+            allowNull: false
+          },
+          restaurant_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'restaurants',
+              key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            allowNull: false
+          },
+          category_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'categories',
+              key: 'id'
+            },
+            onUpdate: 'CASCADE',
             allowNull: false
           },
           created_at: {

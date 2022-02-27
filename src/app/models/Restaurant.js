@@ -10,7 +10,7 @@ class Restaurant extends Model {
                     validate: {
                         len: {
                             msg: "O nome do restaurante deve ter no minimo 3 caracteres e no máximo 30.",
-                            args: [3, 15],
+                            args: [3, 30],
                         },
                     },
                 },
@@ -22,11 +22,11 @@ class Restaurant extends Model {
         );
     }
     static associate(models){
-        this.hasOne(models.Address, {
+        this.belongsTo(models.Address, {
             foreignKey: 'address_id',
             as: 'address'
         })
-        this.hasOne(models.Category, {
+        this.belongsTo(models.Category, {
             foreignKey: 'category_id',
             as: 'category'
         })

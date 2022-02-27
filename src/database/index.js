@@ -1,14 +1,22 @@
 const Sequelize = require('sequelize');
 const dbConfig = require('../config');
 
-const models = [
-    require('../app/models/User'),
-    require('../app/models/Address'),
-    require('../app/models/Restaurant'),
-    require('../app/models/Category'),
-]
+
+const User = require('../app/models/User')
+const Address = require('../app/models/Address')
+const Restaurant = require('../app/models/Restaurant')
+const Category = require('../app/models/Category')
+const Menu = require('../app/models/Menu');
+
 const connection = new Sequelize(dbConfig);
 
-models.map(model=> model.init(connection))
+User.init(connection)
+Address.init(connection)
+Restaurant.init(connection)
+Category.init(connection)
+Menu.init(connection)
+
+Restaurant.associate(connection.models)
+Menu.associate(connection.models)
 
 module.exports = connection;

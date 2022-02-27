@@ -1,11 +1,12 @@
-const { destroy } = require("../models/Category");
 const Category = require("../models/Category");
+const Menu = require("../models/Menu");
+const Restaurant = require("../models/Restaurant");
 
-class CategoryController {
+class MenuController {
     async index(req, res) {
         try {
-            const categories = await Category.findAll();
-            res.status(200).json({ message: "success", categories });
+            const menus = await Menu.findAll();
+            res.status(200).json({ message: "success", menus });
         } catch (e) {
             res.status(400).json({ message: "error", e });
         }
@@ -13,20 +14,28 @@ class CategoryController {
     async show(req, res) {
         try {
             const { id } = req.params;
-            const category = await Category.findByPk(id);
-            if (!category) {
-                res.json({ message: `Categoria não encontrado` });
+            const menu = await Menu.findByPk(id);
+            if (!menu) {
+                res.json({ message: `Menu não encontrado` });
             }
-            res.json({ message: "success", category });
+            res.json({ message: "success", menu });
         } catch (e) {
             res.status(400).json({ message: "error", e });
         }
     }
     async store(req, res) {
         try {
-            const { description } = req.body;
-            const category = await Category.create({ description });
-            res.json({ message: "success", category });
+            const { title, description, price, restaurant_id, category_id } = req.body;
+            const restaurant = await Restaurant.findByPk(restaurant_id)
+            if (!restaurant) {
+                res.json({ message: `Restaurante não encontrado.` });
+            }
+            const category = await Category.findByPk(category_id)
+            if (!category) {
+                res.json({ message: `Categoria não encontrado.` });
+            }
+            const menu = await Menu.create({ title, description, price, restaurant_id: restaurant.id, category_id: category.id });
+            res.json({ message: "success", menu });
         } catch (e) {
             res.status(400).json({ message: "error", e });
         }
@@ -35,7 +44,7 @@ class CategoryController {
         try {
             const { id } = req.params;
             const { description } = req.body
-            const category = await Category.findByPk(id)
+            const menu = await Menu.findByPk(id)
             if(!category) {
                 return res.json({ message: `Categoria não encontrado`});    
             }
@@ -48,15 +57,15 @@ class CategoryController {
     async destroy(req, res) {
         try {
             const { id } = req.params;
-            const category = await Category.findByPk(id)
+            const menu = await Menu.findByPk(id)
             if(!category) {
                 return res.json({ message: `Categoria não encontrado`});    
             }
-            await category.destroy()
+            await Menu.destroy()
             res.status(200).json();
         } catch (e) {
             res.status(400).json({ message: "error", e });
         }
     }
 }
-module.exports = new CategoryController();
+module.exports = new MenuController();

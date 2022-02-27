@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/server.js",
+    "migrate:seeds-up":"npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "migrate:down":"npx sequelize-cli db:migrate:undo:all",
     "swagger-docs": "node ./src/utils/swagger.js"
   },
   "keywords": [],
