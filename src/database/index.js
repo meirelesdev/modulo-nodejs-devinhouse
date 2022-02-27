@@ -7,6 +7,7 @@ const Address = require('../app/models/Address')
 const Restaurant = require('../app/models/Restaurant')
 const Category = require('../app/models/Category')
 const Menu = require('../app/models/Menu');
+const Order = require('../app/models/Order')
 
 const connection = new Sequelize(dbConfig);
 
@@ -15,8 +16,10 @@ Address.init(connection)
 Restaurant.init(connection)
 Category.init(connection)
 Menu.init(connection)
+Order.init(connection)
 
 Restaurant.associate(connection.models)
+Order.associate(connection.models)
 Menu.associate(connection.models)
 
 module.exports = connection;

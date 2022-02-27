@@ -1,12 +1,12 @@
 const routes = require('express').Router()
 
-const AddressesController = require('../../app/controllers/AddressesController')
+const AddressController = require('../../app/controllers/AddressController')
 
-routes.get('/addresses', AddressesController.index)
-routes.post('/addresses', AddressesController.store)
-routes.get('/addresses/:id', AddressesController.show)
-routes.patch('/addresses/:id', AddressesController.update)
-routes.delete('/addresses/:id', AddressesController.destroy)
+routes.get('/addresses', AddressController.index)
+routes.post('/addresses', AddressController.store)
+routes.get('/addresses/:id', AddressController.show)
+routes.patch('/addresses/:id', AddressController.update)
+routes.delete('/addresses/:id', AddressController.destroy)
 
 
 module.exports = routes
